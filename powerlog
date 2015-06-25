@@ -1,0 +1,34 @@
+#!/bin/bash
+
+bat0w=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep energy-rate:|awk '{print $2}')
+bat1w=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy-rate:|awk '{print $2}')
+bat0p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep percentage:|awk '{print $2}'|sed 's/%//')
+bat1p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//')
+
+if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == "discharging" ]] || [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}') == "discharging" ]];then
+    if [[ -n $bat1w ]];then
+        if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//') -gt '5' ]];then
+            echo [$(date +'%F %R')] 2D, $bat1w W, $(echo $(echo $bat0p+$bat1p |bc)/2 |bc) %, $bat0p %, $bat1p % >> /var/log/power.log
+        else
+            echo [$(date +'%F %R')] 2D, $bat0w W, $(echo $(echo $bat0p+$bat1p |bc)/2 |bc) %, $bat0p %, $bat1p % >> /var/log/power.log
+        fi
+    else
+        echo [$(date +'%F %R')] 1D, $bat0w W, $bat0p % >> /var/log/power.log
+    fi
+elif [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == "charging" ]] || [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}') == "charging" ]];then
+    if [[ -n $bat1w ]];then
+        if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == 'fully-charged' ]];then
+            echo [$(date +'%F %R')] 2C, $bat1w W, $(echo $(echo $bat0p+$bat1p |bc)/2 |bc) %, $bat0p %, $bat1p % >> /var/log/power.log
+        else
+            echo [$(date +'%F %R')] 2C, $(echo $bat0w+$bat1w|bc) W, $(echo $(echo $bat0p+$bat1p |bc)/2 |bc) %, $bat0p %, $bat1p % >> /var/log/power.log
+        fi
+    else
+        echo [$(date +'%F %R')] 1C, $bat0w W, $bat0p % >> /var/log/power.log
+    fi
+elif [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == "fully-charged" ]] && [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}') == "fully-charged" ]];then
+    if [[ -n $bat1w ]];then
+        echo [$(date +'%F %R')] 2F >> /var/log/power.log
+    else
+        echo [$(date +'%F %R')] 1F >> /var/log/power.log
+    fi
+fi

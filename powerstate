@@ -1,0 +1,12 @@
+#!/bin/bash
+
+bat0p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}')
+bat1p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}')
+
+if [[ $bat0p == 'fully-charged' ]] && [[ $bat1p == 'fully-charged' ]];then
+    echo fully-charged
+elif [[ $bat0p == 'charging' ]] || [[ $bat1p == 'charging' ]];then
+    echo charging
+else
+    echo discharging
+fi
