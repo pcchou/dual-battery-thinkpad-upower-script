@@ -6,12 +6,12 @@ bat1w=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy-rate:
 if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == "charging" ]] || [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}') == "charging" ]];then
     if [[ -n $bat1w ]];then
         if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == 'fully-charged' ]];then
-            echo $bat1w
+            echo "Fully Charged." 1>&2
         else
-            echo $bat0w
+            echo "Fully Charged." 1>&2
         fi
     else
-        echo $bat0w
+        echo "Fully Charged." 1>&2
     fi
 elif [[ -n $bat1w ]];then
     if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//') -gt '5' ]];then

@@ -1,11 +1,14 @@
 #!/bin/bash
 
-if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:) ]]; then
-    bat0p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep percentage:|awk '{print $2}'|sed 's/%//')
-    bat1p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//')
-    echo $(echo $(echo $bat0p+$bat1p |bc)/2 |bc)
+bat0e=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep energy:|awk '{print $2}'|sed 's/%//')
+bat1e=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy:|awk '{print $2}'|sed 's/%//')
+bat0f=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep energy-full:|awk '{print $2}'|sed 's/%//')
+bat1f=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy-full:|awk '{print $2}'|sed 's/%//')
+bat0p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep percentage:|awk '{print $2}'|sed 's/%//')
+
+if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1) ]]; then
+    echo $(echo \(\($bat0e'+'$bat1e\)'/'\($bat0f'+'$bat1f \)\)'*100' |bc -l)
 else
-    bat0p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep percentage:|awk '{print $2}'|sed 's/%//')
     echo $bat0p
 fi
 
