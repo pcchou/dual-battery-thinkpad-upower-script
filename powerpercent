@@ -6,7 +6,7 @@ bat0f=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep energy-full:
 bat1f=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy-full:|awk '{print $2}'|sed 's/%//')
 bat0p=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep percentage:|awk '{print $2}'|sed 's/%//')
 
-if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1) ]]; then
+if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep present) ]]; then
     echo $(echo \(\($bat0e'+'$bat1e\)'/'\($bat0f'+'$bat1f \)\)'*100' |bc -l)
 else
     echo $bat0p
