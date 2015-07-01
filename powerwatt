@@ -3,9 +3,9 @@
 bat0w=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep energy-rate:|awk '{print $2}')
 bat1w=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy-rate:|awk '{print $2}')
 
-if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == "charging" ]] || [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}') == "charging" ]];then
-    if [[ -n $bat1w ]];then
-        if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == 'fully-charged' ]];then
+if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == "charging" ]] || [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep state:|awk '{print $2}') == "charging" ]]; then
+    if [[ -n $bat1w ]]; then
+        if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '{print $2}') == 'fully-charged' ]]; then
             echo "Fully Charged." 1>&2
         else
             echo "Fully Charged." 1>&2
@@ -13,8 +13,8 @@ if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '
     else
         echo "Fully Charged." 1>&2
     fi
-elif [[ -n $bat1w ]];then
-    if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//') -gt '5' ]];then
+elif [[ -n $bat1w ]]; then
+    if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//') -gt '5' ]]; then
         echo $bat1w
     else
         echo $bat0w
