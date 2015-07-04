@@ -14,7 +14,7 @@ if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep state:|awk '
         echo "Fully Charged." 1>&2
     fi
 elif [[ -n $bat1w ]]; then
-    if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//') -gt '5' ]]; then
+    if [[ $(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep percentage:|awk '{print $2}'|sed 's/%//') -gt '6' ]]; then
         echo $bat1w
     else
         echo $bat0w
