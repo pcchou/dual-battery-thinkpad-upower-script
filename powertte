@@ -1,6 +1,6 @@
 #!/bin/bash
 
-avgwatt=$(cat /var/log/power.log|grep 2D|tail -n 15|awk '{if ($4 >= 3.5) print $4}'|awk '{ total += $0; count++ } END { print total/count }' )
+avgwatt=$(cat /var/log/power.log|grep 2D|awk '{if ($4 >= 3.5) print $4}'|tail -n 15|awk '{ total += $0; count++ } END { print total/count }' )
 bat0e=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0|grep energy:|awk '{print $2}')
 bat1e=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1|grep energy:|awk '{print $2}')
 
